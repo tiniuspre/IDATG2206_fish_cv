@@ -1,9 +1,14 @@
 import cv2
 
-from fish_cv.constants import INPUT_PATH, OUTPUT_PATH, H_B, L_B, D_A, D_B
-from fish_cv.measurement import pixel_distance, calculate_real_length
-from fish_cv.segmentation import load_image, create_fish_mask, keep_largest_contour, apply_mask
+from fish_cv.constants import D_A, D_B, H_B, INPUT_PATH, L_B, OUTPUT_PATH
 from fish_cv.geometry import find_left_right_points
+from fish_cv.measurement import calculate_real_length, pixel_distance
+from fish_cv.segmentation import (
+    apply_mask,
+    create_fish_mask,
+    keep_largest_contour,
+    load_image,
+)
 
 
 def main():
