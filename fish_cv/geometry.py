@@ -1,12 +1,16 @@
 import numpy as np
+from numpy.typing import NDArray
 
 
-def find_left_right_points(mask):
-    """Returns the coordinates for the farthest point to the left and right of the fish"""
+def find_left_right_points(
+    mask: NDArray[np.uint8],
+) -> tuple[tuple[int, int], tuple[int, int]]:
+    """Return the leftmost and rightmost points of the fish mask."""
     ys, xs = np.nonzero(mask > 0)
 
     if len(xs) == 0:
-        raise ValueError("No segmented object found")
+        msg = "No segmented object found."
+        raise ValueError(msg)
 
     min_x = xs.min()
     left_y = ys[xs == min_x].min()
