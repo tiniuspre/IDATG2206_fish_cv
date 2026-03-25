@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def pixel_distance(p1, p2):
     """Returns the Euclidean distance in pixels between two points"""
     x1, y1 = p1

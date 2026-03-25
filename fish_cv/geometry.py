@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def find_left_right_points(mask):
     """Returns the coordinates for the farthest point to the left and right of the fish"""
     ys, xs = np.nonzero(mask > 0)
