@@ -69,7 +69,7 @@ select = [
     "PT",    # flake8-pytest-style — enforces pytest best practices
     "PTH",   # flake8-use-pathlib — prefers pathlib over os.path
     "PYI",   # flake8-pyi — checks .pyi stub files
-    "Q",     # flake8-quotes — enforces consistent quote style
+    #"Q",     # flake8-quotes — enforces consistent quote style
     "RET",   # flake8-return — checks return statement consistency
     "RSE",   # flake8-raise — checks raise statement style
     "RUF",   # ruff-specific rules
