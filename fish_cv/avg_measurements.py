@@ -3,22 +3,21 @@ from statistics import mean, median
 
 @dataclasses.dataclass
 class ImageMeasurement:
-    """ The ImageMeasurement class represents the measurements of
-    a fish in a single image, including the image ID, length,
-    and height of the fish. This class is used to store and organize
-    the measurement data for multiple images, which can then be processed
-    by the FishSizeEstimator class to estimate the average
-    size of the fish."""
+    """Stores fish measurements from a single image.
+
+    Includes the image ID, fish length, and fish height.
+    """
     img_id: str
     length: float
     height: float
 
 
 class FishSizeEstimator:
-    """ The FishSizeEstimator class takes
-     a list of ImageMeasurement instances and provides methods
-     to estimate the average length and height of the fish."""
-    def __init__(self, measurements) -> None:
+    """Estimates fish size from multiple image measurements.
+
+    Computes average length and height values.
+    """
+    def __init__(self, measurements: list[ImageMeasurement]) -> None:
         """Initializes the FishSizeEstimator with a list of ImageMeasurement instances."""
         self.measurements = measurements
         self._validate()
