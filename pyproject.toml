@@ -27,6 +27,7 @@ exclude = [
     "node_modules",
     "site-packages",
     "venv",
+    "yolo_minimal"
 ]
 
 line-length = 88
