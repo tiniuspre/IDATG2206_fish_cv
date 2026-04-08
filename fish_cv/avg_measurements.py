@@ -6,23 +6,17 @@ MIN_VALUE_OUTLIER_CHECK = 4
 
 @dataclasses.dataclass
 class ImageMeasurement:
-    """Stores fish measurements from a single image.
-    Includes the image ID, fish length, and fish height.
-    """
+    """Stores fish measurements from a single image."""
     img_id: str
     length: float
     height: float
 
 
 class FishSizeEstimator:
-    """Estimates fish size from multiple image measurements.
-    Computes average length and height values.
-    """
+    """Estimates fish size from multiple image measurements."""
 
     def __init__(self, measurements: list[ImageMeasurement]) -> None:
-        """Initializes the FishSizeEstimator.
-         Using list of ImageMeasurement instances.
-         """
+        """Initializes the FishSizeEstimator."""
         self.measurements = measurements
         self._validate()
 
@@ -50,9 +44,7 @@ class FishSizeEstimator:
 
     @classmethod
     def _has_outliers(cls, values: list[float]) -> bool:
-        """Detects outliers in the list of values.
-         Using the IQR method.
-         """
+        """Detects outliers in the list of values."""
         if len(values) < MIN_VALUE_OUTLIER_CHECK:
             return False
 
@@ -66,9 +58,7 @@ class FishSizeEstimator:
 
     @classmethod
     def _robust_center(cls, values: list[float]) -> float:
-        """Returns the median if outliers are detected.
-         Otherwise, returns the mean.
-         """
+        """Returns the median if outliers are detected."""
         return median(values) if cls._has_outliers(values) else mean(values)
 
     def avg_length(self) -> float:
@@ -108,9 +98,7 @@ class FishSizeEstimator:
         return abs(estimated - measured) / abs(measured)
 
     def result(self) -> dict:
-        """Provides a summary of the estimation process.
-         Includes which method was used and the estimated values.
-         """
+        """Provides a summary of the estimation process."""
         lengths = [m.length for m in self.measurements]
         heights = [m.height for m in self.measurements]
 
