@@ -9,7 +9,7 @@ def find_left_right_points(
     ys, xs = np.nonzero(mask > 0)
 
     if len(xs) == 0:
-        msg = "No segmented object found."
+        msg = 'No segmented object found.'
         raise ValueError(msg)
 
     min_x = xs.min()

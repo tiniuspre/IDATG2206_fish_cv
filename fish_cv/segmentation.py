@@ -7,7 +7,7 @@ def load_image(path: str) -> NDArray[np.uint8]:
     """Load an image from disk."""
     img = cv2.imread(path)
     if img is None:
-        msg = f"Could not load image: {path}"
+        msg = f'Could not load image: {path}'
         raise FileNotFoundError(msg)
     return img
 
@@ -40,7 +40,7 @@ def keep_largest_contour(mask: NDArray[np.uint8]) -> NDArray[np.uint8]:
     clean_mask = np.zeros_like(mask)
 
     if not contours:
-        msg = "No contours found."
+        msg = 'No contours found.'
         raise ValueError(msg)
 
     largest = max(contours, key=cv2.contourArea)
