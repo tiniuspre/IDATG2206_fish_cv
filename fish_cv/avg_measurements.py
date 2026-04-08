@@ -7,7 +7,6 @@ MIN_VALUE_OUTLIER_CHECK = 4
 @dataclasses.dataclass
 class ImageMeasurement:
     """Stores fish measurements from a single image.
-
     Includes the image ID, fish length, and fish height.
     """
     img_id: str
@@ -17,13 +16,11 @@ class ImageMeasurement:
 
 class FishSizeEstimator:
     """Estimates fish size from multiple image measurements.
-
     Computes average length and height values.
     """
 
     def __init__(self, measurements: list[ImageMeasurement]) -> None:
         """Initializes the FishSizeEstimator.
-
          Using list of ImageMeasurement instances.
          """
         self.measurements = measurements
@@ -54,7 +51,6 @@ class FishSizeEstimator:
     @classmethod
     def _has_outliers(cls, values: list[float]) -> bool:
         """Detects outliers in the list of values.
-
          Using the IQR method.
          """
         if len(values) < MIN_VALUE_OUTLIER_CHECK:
@@ -71,7 +67,6 @@ class FishSizeEstimator:
     @classmethod
     def _robust_center(cls, values: list[float]) -> float:
         """Returns the median if outliers are detected.
-
          Otherwise, returns the mean.
          """
         return median(values) if cls._has_outliers(values) else mean(values)
@@ -114,7 +109,6 @@ class FishSizeEstimator:
 
     def result(self) -> dict:
         """Provides a summary of the estimation process.
-
          Includes which method was used and the estimated values.
          """
         lengths = [m.length for m in self.measurements]
