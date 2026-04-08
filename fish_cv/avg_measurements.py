@@ -1,46 +1,54 @@
 import dataclasses
 from statistics import mean, median
 
-# This module provides a class for estimating fish size based on measurements from multiple images.
-# It can use both mean and median to provide robust estimates, depending on the occurrence of outliers.
 @dataclasses.dataclass
 class ImageMeasurement:
+    """ The ImageMeasurement class represents the measurements of
+    a fish in a single image, including the image ID, length,
+    and height of the fish. This class is used to store and organize
+    the measurement data for multiple images, which can then be processed
+    by the FishSizeEstimator class to estimate the average
+    size of the fish."""
     img_id: str
     length: float
     height: float
 
-# The FishSizeEstimator class takes a list of ImageMeasurement instances and provides methods
-# to estimate the average length and height of the fish.
+
 class FishSizeEstimator:
+    """ The FishSizeEstimator class takes
+     a list of ImageMeasurement instances and provides methods
+     to estimate the average length and height of the fish."""
     def __init__(self, measurements) -> None:
+        """Initializes the FishSizeEstimator with a list of ImageMeasurement instances."""
         self.measurements = measurements
         self._validate()
 
     def _validate(self) -> None:
         if not self.measurements:
-            raise ValueError("No measurements provided")
+            msg = "No measurements provided"
+            raise ValueError(msg)
 
-    # Helper method to calculate quartiles for outlier detection
     @staticmethod
     def _quartiles(values: list[float]) -> tuple[float, float]:
         values = sorted(values)
         n = len(values)
-        mid = n // 2 # index for splitting data
+        mid = n // 2  # index for split data
 
-        if n % 2 == 0: # even number of values
+        if n % 2 == 0:  # even number
             lower_half = values[:mid]
             upper_half = values[mid:]
         else:
             lower_half = values[:mid]
-            upper_half = values[mid + 1:] # exclude median for odd count
+            upper_half = values[mid + 1:]  # exclude median odd count
 
         q1 = median(lower_half)
         q3 = median(upper_half)
         return q1, q3
 
-    # Simple outlier detection using IQR method
+
     @classmethod
     def _has_outliers(cls, values: list[float]) -> bool:
+        """Detects outliers in the list of values using the IQR method."""
         if len(values) < 4:
             return False
 
@@ -53,7 +61,6 @@ class FishSizeEstimator:
         return any(x < lower_bound or x > upper_bound for x in values)
 
 
-    # If outliers are detected, use median; otherwise, use mean
     @classmethod
     def _robust_center(cls, values: list[float]) -> float:
         return median(values) if cls._has_outliers(values) else mean(values)
@@ -78,19 +85,17 @@ class FishSizeEstimator:
         heights = [m.height for m in self.measurements]
         return self._robust_center(heights)
 
-    # The relative_error method calculates the relative error between the estimated and measured values
-    # which can be useful for evaluating the accuracy of the estimation.
     @staticmethod
     def relative_error(estimated: float, measured: float) -> float:
+        """Calculates the relative error between the estimated and measured values."""
         if measured == 0:
             raise ValueError("Measured value cannot be zero for relative error calculation")
         return abs(estimated - measured) / abs(measured)
 
-    # The result method provides a summary of the estimation process, including which method was used and the estimated values.
+
     def result(self) -> dict:
         lengths = [m.length for m in self.measurements]
         heights = [m.height for m in self.measurements]
-
 
         return {
             "length used": "median" if self._has_outliers(lengths) else "mean",
@@ -98,6 +103,7 @@ class FishSizeEstimator:
             "estimated_length": self.best_length(),
             "estimated_height": self.best_height(),
         }
+
 
 # Example usage with test data
 if __name__ == "__main__":
