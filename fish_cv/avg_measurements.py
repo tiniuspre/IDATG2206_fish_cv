@@ -78,15 +78,12 @@ class FishSizeEstimator:
         return median(m.height for m in self.measurements)
 
     def best_length(self) -> float:
-        """Determines the best length estimate.
-
-         Using median if outliers are present.
-         """
+        """Determines the best length estimate."""
         lengths = [m.length for m in self.measurements]
         return self._robust_center(lengths)
 
     def best_height(self) -> float:
-        """Determines the best height estimate"""
+        """Determines the best height estimate."""
         heights = [m.height for m in self.measurements]
         return self._robust_center(heights)
 
@@ -94,7 +91,8 @@ class FishSizeEstimator:
     def relative_error(estimated: float, measured: float) -> float:
         """Calculates the relative error between the estimated and measured values."""
         if measured == 0:
-            raise ValueError("Measured value cannot be zero for relative error calculation")
+            msg = "Measured value cannot be zero for relative error calculation"
+            raise ValueError(msg)
         return abs(estimated - measured) / abs(measured)
 
     def result(self) -> dict:
@@ -110,21 +108,6 @@ class FishSizeEstimator:
         }
 
 
-if __name__ == "__main__":
-    img_measurements = [
-        ImageMeasurement("img_1", 55.8, 12.2),
-        ImageMeasurement("img_2", 60.3, 10.5),
-        ImageMeasurement("img_3", 58.7, 11.0),
-        ImageMeasurement("img_4", 57.2, 9.8),
-        ImageMeasurement("img_5", 59.1, 11.5),
-        ImageMeasurement("img_6", 56.5, 10.0),
-        ImageMeasurement("img_7", 61.0, 12.8),
-        ImageMeasurement("img_8", 58.0, 11.2),
-        ImageMeasurement("img_9", 57.5, 10.7),
-        ImageMeasurement("img_10", 59.5, 11.3)
-    ]
 
-    imgBatch = FishSizeEstimator(img_measurements)
-    result = imgBatch.result()
 
-    print(result)
+
