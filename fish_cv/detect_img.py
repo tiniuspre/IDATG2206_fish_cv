@@ -1,8 +1,17 @@
+import pathlib
+
 import cv2
 import torch
 
+file_path = pathlib.Path(__file__).parent.resolve()
+root_path = file_path.parent.resolve()
+
 model = torch.hub.load(
-    '../yolo_minimal', 'custom', 'best_mult.pt', source='local', trust_repo=True
+    str(root_path / 'yolo_minimal'),
+    'custom',
+    str(file_path / 'best_mult.pt'),
+    source='local',
+    trust_repo=True,
 )
 model.conf = 0.5
 
