@@ -3,6 +3,7 @@ from statistics import mean, median
 
 MIN_VALUE_OUTLIER_CHECK = 4
 
+
 @dataclasses.dataclass
 class ImageMeasurement:
     """Stores fish measurements from a single image.
@@ -19,8 +20,12 @@ class FishSizeEstimator:
 
     Computes average length and height values.
     """
+
     def __init__(self, measurements: list[ImageMeasurement]) -> None:
-        """Initializes the FishSizeEstimator with a list of ImageMeasurement instances."""
+        """Initializes the FishSizeEstimator.
+
+         Using list of ImageMeasurement instances.
+         """
         self.measurements = measurements
         self._validate()
 
@@ -46,12 +51,11 @@ class FishSizeEstimator:
         q3 = median(upper_half)
         return q1, q3
 
-
     @classmethod
     def _has_outliers(cls, values: list[float]) -> bool:
-        """Detects outliers in the list of values using
+        """Detects outliers in the list of values.
 
-         the IQR method.
+         Using the IQR method.
          """
         if len(values) < MIN_VALUE_OUTLIER_CHECK:
             return False
@@ -64,12 +68,11 @@ class FishSizeEstimator:
 
         return any(x < lower_bound or x > upper_bound for x in values)
 
-
     @classmethod
     def _robust_center(cls, values: list[float]) -> float:
-        """Returns the median if outliers are detected
+        """Returns the median if outliers are detected.
 
-         otherwise returns the mean.
+         Otherwise, returns the mean.
          """
         return median(values) if cls._has_outliers(values) else mean(values)
 
@@ -90,9 +93,9 @@ class FishSizeEstimator:
         return median(m.height for m in self.measurements)
 
     def best_length(self) -> float:
-        """Determines the best length estimate
+        """Determines the best length estimate.
 
-         using median if outliers are present.
+         Using median if outliers are present.
          """
         lengths = [m.length for m in self.measurements]
         return self._robust_center(lengths)
@@ -109,11 +112,10 @@ class FishSizeEstimator:
             raise ValueError("Measured value cannot be zero for relative error calculation")
         return abs(estimated - measured) / abs(measured)
 
-
     def result(self) -> dict:
-        """Provides a summary of the estimation process
+        """Provides a summary of the estimation process.
 
-         including which method was used and the estimated values.
+         Includes which method was used and the estimated values.
          """
         lengths = [m.length for m in self.measurements]
         heights = [m.height for m in self.measurements]
@@ -124,7 +126,6 @@ class FishSizeEstimator:
             "estimated_length": self.best_length(),
             "estimated_height": self.best_height(),
         }
-
 
 
 if __name__ == "__main__":
