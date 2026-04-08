@@ -7,6 +7,7 @@ MIN_VALUE_OUTLIER_CHECK = 4
 @dataclasses.dataclass
 class ImageMeasurement:
     """Stores fish measurements from a single image."""
+
     img_id: str
     length: float
     height: float
@@ -22,7 +23,7 @@ class FishSizeEstimator:
 
     def _validate(self) -> None:
         if not self.measurements:
-            msg = "No measurements provided"
+            msg = 'No measurements provided'
             raise ValueError(msg)
 
     @staticmethod
@@ -36,7 +37,7 @@ class FishSizeEstimator:
             upper_half = values[mid:]
         else:
             lower_half = values[:mid]
-            upper_half = values[mid + 1:]  # exclude median odd count
+            upper_half = values[mid + 1 :]  # exclude median odd count
 
         q1 = median(lower_half)
         q3 = median(upper_half)
@@ -91,7 +92,7 @@ class FishSizeEstimator:
     def relative_error(estimated: float, measured: float) -> float:
         """Calculates the relative error between the estimated and measured values."""
         if measured == 0:
-            msg = "Measured value cannot be zero for relative error calculation"
+            msg = 'Measured value cannot be zero for relative error calculation'
             raise ValueError(msg)
         return abs(estimated - measured) / abs(measured)
 
@@ -101,13 +102,8 @@ class FishSizeEstimator:
         heights = [m.height for m in self.measurements]
 
         return {
-            "length used": "median" if self._has_outliers(lengths) else "mean",
-            "height used": "median" if self._has_outliers(heights) else "mean",
-            "estimated_length": self.best_length(),
-            "estimated_height": self.best_height(),
+            'length used': 'median' if self._has_outliers(lengths) else 'mean',
+            'height used': 'median' if self._has_outliers(heights) else 'mean',
+            'estimated_length': self.best_length(),
+            'estimated_height': self.best_height(),
         }
-
-
-
-
-
