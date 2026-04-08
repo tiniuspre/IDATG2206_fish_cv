@@ -10,6 +10,16 @@ def has_fish_in_image(image) -> bool:
     return len(results.xyxy[0]) > 0
 
 
+def is_whole_fish_in_image(image, margin=10) -> bool:
+    results = model(image)
+    h, w = image.shape[:2]
+    for *box, conf, cls in results.xyxy[0].cpu().numpy():
+        x1, y1, x2, y2 = map(int, box)
+        if x1 > margin and y1 > margin and x2 < w - margin and y2 < h - margin:
+            return True
+    return False
+
+
 if __name__ == '__main__':
     img = cv2.imread('../data/fish/fishtestimg.jpg')
     results = model(img)
@@ -29,3 +39,4 @@ if __name__ == '__main__':
 
     cv2.imwrite('../data/result/fish_detection.jpg', img)
     print(has_fish_in_image(img))
+    print(is_whole_fish_in_image(img))
