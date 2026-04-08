@@ -1,6 +1,8 @@
 import dataclasses
 from statistics import mean, median
 
+MIN_VALUE_OUTLIER_CHECK = 4
+
 @dataclasses.dataclass
 class ImageMeasurement:
     """Stores fish measurements from a single image.
@@ -47,8 +49,11 @@ class FishSizeEstimator:
 
     @classmethod
     def _has_outliers(cls, values: list[float]) -> bool:
-        """Detects outliers in the list of values using the IQR method."""
-        if len(values) < 4:
+        """Detects outliers in the list of values using
+
+         the IQR method.
+         """
+        if len(values) < MIN_VALUE_OUTLIER_CHECK:
             return False
 
         q1, q3 = cls._quartiles(values)
@@ -62,25 +67,38 @@ class FishSizeEstimator:
 
     @classmethod
     def _robust_center(cls, values: list[float]) -> float:
+        """Returns the median if outliers are detected
+
+         otherwise returns the mean.
+         """
         return median(values) if cls._has_outliers(values) else mean(values)
 
     def avg_length(self) -> float:
+        """Calculates the average length from the measurements."""
         return mean(m.length for m in self.measurements)
 
     def avg_height(self) -> float:
+        """Calculates the average height from the measurements."""
         return mean(m.height for m in self.measurements)
 
     def median_length(self) -> float:
+        """Calculates the median length from the measurements."""
         return median(m.length for m in self.measurements)
 
     def median_height(self) -> float:
+        """Calculates the median height from the measurements."""
         return median(m.height for m in self.measurements)
 
     def best_length(self) -> float:
+        """Determines the best length estimate
+
+         using median if outliers are present.
+         """
         lengths = [m.length for m in self.measurements]
         return self._robust_center(lengths)
 
     def best_height(self) -> float:
+        """Determines the best height estimate"""
         heights = [m.height for m in self.measurements]
         return self._robust_center(heights)
 
@@ -93,6 +111,10 @@ class FishSizeEstimator:
 
 
     def result(self) -> dict:
+        """Provides a summary of the estimation process
+
+         including which method was used and the estimated values.
+         """
         lengths = [m.length for m in self.measurements]
         heights = [m.height for m in self.measurements]
 
@@ -104,7 +126,7 @@ class FishSizeEstimator:
         }
 
 
-# Example usage with test data
+
 if __name__ == "__main__":
     img_measurements = [
         ImageMeasurement("img_1", 55.8, 12.2),
